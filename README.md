@@ -1,6 +1,10 @@
 # Canipulator
 
-Use this repo to test out the functionality of your Canipulator. You'll need PlatformIO - the easiest way is to install the PlatformIO plugin for VS Code.
+Use this repo to test out the functionality of your Canipulator (based on the ESP32-C6 platform).
+
+## Requirements
+
+* PlatformIO
 
 ## Setup
 
