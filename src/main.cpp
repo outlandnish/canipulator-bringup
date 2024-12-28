@@ -17,6 +17,11 @@ SmartLed leds(LED_WS2812B, LED_COUNT, DATA_PIN, CHANNEL, DoubleBuffer);
 void setup() {
   Serial.begin(115200);
 
+  // setup status LED
+  leds[0] = Rgb { 255, 0, 0 };
+  leds.show();
+  leds.wait();
+
   // setup CAN pins
   pinMode(CAN0_SHUTDOWN, OUTPUT);
   pinMode(CAN0_STANDBY, OUTPUT);
@@ -36,13 +41,10 @@ void setup() {
   CAN0.begin(500000);
   CAN1.begin(500000);
 
-  // setup status LED
-  leds[0] = Rgb { 255, 0, 0 };
-  leds.show();
 }
 
-auto lastCan0Frame = millis();
-auto lastCan1Frame = millis();
+auto lastCan0Frame = 0;
+auto lastCan1Frame = 0;
 
 void loop() {
   // check for can messages on each bus
@@ -64,9 +66,11 @@ void loop() {
   }
 
   // show green led when receiving CAN0 and blue led when receiving CAN1
-  bool showGreen = millis() - lastCan0Frame < 1000;
-  bool showBlue = millis() - lastCan1Frame < 1000;
+  auto now = millis();
+  bool showGreen = now - lastCan0Frame < 1000;
+  bool showBlue = now - lastCan1Frame < 1000;
 
   leds[0] = Rgb { showGreen || showGreen ? 0 : 255, showGreen ? 255 : 0, showBlue ? 255 : 0 };
   leds.show();
+  leds.wait();
 }
